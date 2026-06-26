@@ -1286,48 +1286,70 @@
      ────────────────────────────────────────────────────────── */
 
   /* ─────────────────────────────────────────────────────────────
-     11.  LAST section — fade in via CSS when scrolled into view
+     11.  LAST section — crossfade in OVER .about
 
-     Simple IntersectionObserver: when .last enters the viewport,
-     set data-visible="true" which triggers CSS transitions on
-     the background video and copy panel. No pins, no ScrollTrigger,
-     no body overflow hacks. The section lives in normal DOM flow
-     after .about and scrolls into view naturally.
+     .last is position:fixed + visibility:hidden (zero DOM flow
+     impact). A scroll listener checks when .about's bottom edge
+     reaches the viewport top — at that point the crossfade runs:
+     .about fades out while .last fades in (video + copy). No
+     pinning, no extra scroll space.
 
-     prefers-reduced-motion: show immediately.
+     prefers-reduced-motion: show .last immediately.
      ────────────────────────────────────────────────────────── */
   if (lastSectionEl && lastVideoEl && lastInnerEl) {
     lastVideoEl.muted = true;
 
     if (prefersReduced()) {
-      lastSectionEl.setAttribute('data-visible', 'true');
+      lastSectionEl.style.visibility = 'visible';
+      gsap.set(lastVideoEl, { opacity: 1 });
+      gsap.set(lastInnerEl, { opacity: 1, y: 0, clearProps: 'transform' });
       const playPromise = lastVideoEl.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {});
       }
-    } else if ('IntersectionObserver' in window) {
-      let lastPlayed = false;
-      const lastObserver = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            lastSectionEl.setAttribute('data-visible', 'true');
-            if (!lastPlayed) {
-              try { lastVideoEl.currentTime = 0; } catch (_) {}
-              lastVideoEl.play().catch(() => {});
-              lastPlayed = true;
-            }
-          } else {
-            lastSectionEl.removeAttribute('data-visible');
+    } else {
+      lastVideoEl.pause();
+      try { lastVideoEl.currentTime = 0; } catch (_) {}
+
+      const aboutEl = document.querySelector('.about');
+      if (!aboutEl) return;
+
+      let crossfaded = false;
+      let reversed = false;
+      const CROSSFADE_WINDOW = window.innerHeight * 0.4;
+
+      function checkCrossfade() {
+        const sy = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const aboutRect = aboutEl.getBoundingClientRect();
+        const aboutBottom = aboutRect.bottom + sy;
+        const triggerSy = aboutBottom - window.innerHeight;
+
+        if (sy >= triggerSy && !crossfaded) {
+          crossfaded = true;
+          reversed = false;
+          lastSectionEl.style.visibility = 'visible';
+          try { lastVideoEl.currentTime = 0; } catch (_) {}
+          lastVideoEl.play().catch(() => {});
+
+          gsap.to(lastVideoEl, { opacity: 1, duration: 0.6, ease: 'power2.inOut' });
+          gsap.to(aboutEl, { opacity: 0, duration: 0.6, ease: 'power2.inOut' });
+          gsap.to(lastInnerEl, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.05 });
+        }
+
+        if (sy < triggerSy - CROSSFADE_WINDOW && crossfaded && !reversed) {
+          reversed = true;
+          crossfaded = false;
+          gsap.to(lastInnerEl, { opacity: 0, y: 40, duration: 0.4, ease: 'power2.in' });
+          gsap.to(lastVideoEl, { opacity: 0, duration: 0.4, ease: 'power2.in', onComplete: () => {
+            lastSectionEl.style.visibility = 'hidden';
             lastVideoEl.pause();
             try { lastVideoEl.currentTime = 0; } catch (_) {}
-            lastPlayed = false;
-          }
+          }});
+          gsap.to(aboutEl, { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.1 });
         }
-      }, { threshold: 0.15 });
-      lastObserver.observe(lastSectionEl);
-    } else {
-      lastSectionEl.setAttribute('data-visible', 'true');
-      lastVideoEl.play().catch(() => {});
+      }
+
+      window.addEventListener('scroll', checkCrossfade, { passive: true });
     }
   }
 })();
