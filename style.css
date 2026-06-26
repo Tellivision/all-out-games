@@ -1399,6 +1399,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .hero-trust .logo-mark { width: 20px; height: 20px; font-size: 8px; }
   .scroll-hint { bottom: 18px; }
 
+  /* Remove video filter on mobile — forces software compositing which
+     compounds playbackRate-change stutter. */
+  .hero-video { filter: none; }
+
   /* ── Next section ── */
   .next-inner {
     padding: clamp(60px, 8vh, 90px) clamp(14px, 2.5vw, 28px) clamp(60px, 8vh, 90px);
@@ -1412,9 +1416,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .next-stat-label { font-size: 8px; letter-spacing: 0.16em; }
   .next-sub { font-size: clamp(13px, 1.2vw, 16px); }
   .next-worlds-wrap { padding: 0 clamp(12px, 2vw, 24px); }
+  .next-worlds { text-align: center; }
   .next-world-row {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 4px;
     padding: clamp(14px, 2vh, 20px) clamp(12px, 2vw, 18px);
   }

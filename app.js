@@ -264,16 +264,20 @@
     if (!video) return;
     try { video.pause(); video.currentTime = 0; } catch (_) {}
 
-    const rateSetter = (val) => {
-      try { video.playbackRate = val; } catch (_) {}
-    };
-
     let prevY = window.scrollY || window.pageYOffset || 0;
     let prevT = performance.now();
     let started = false;
+    let lastRateWrite = 0;
+    let pendingRate = 0;
     const RATE_CAP = 3.0;
     const RATE_MIN = 0.0625;
     const PLAY_GATE_VY = 0.05;
+    const RATE_THROTTLE_MS = 32; // ~30fps cap on playbackRate writes
+
+    function flushRate() {
+      try { video.playbackRate = pendingRate; } catch (_) {}
+      lastRateWrite = performance.now();
+    }
 
     function tick() {
       const now = performance.now();
@@ -287,7 +291,8 @@
       // When scrolled back to top, reset to first frame and freeze.
       if (sy < 10) {
         try { video.pause(); video.currentTime = 0; } catch (_) {}
-        rateSetter(0);
+        pendingRate = 0;
+        flushRate();
         started = false;
         return;
       }
@@ -303,8 +308,14 @@
 
       // Forward scroll only — rate = velocity, backward freezes.
       const rawRate = (vy > 0) ? Math.min(vy, RATE_CAP) : 0;
-      const rate = (rawRate > 0 && rawRate < RATE_MIN) ? 0 : rawRate;
-      rateSetter(rate);
+      pendingRate = (rawRate > 0 && rawRate < RATE_MIN) ? 0 : rawRate;
+
+      // Throttle playbackRate writes — on mobile, each write forces the
+      // decode pipeline to recalculate. Capping at ~30fps keeps the
+      // visual smooth while cutting the decode thrash in half.
+      if (now - lastRateWrite >= RATE_THROTTLE_MS) {
+        flushRate();
+      }
     }
 
     window.addEventListener('scroll', tick, { passive: true });
