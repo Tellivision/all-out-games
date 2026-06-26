@@ -609,8 +609,7 @@
       .to(heroCtas,   { autoAlpha: 0, y: -25, duration: 0.6, ease: 'power2.in' }, outroStart + 0.10)
       .to(heroTrust,  { autoAlpha: 0, y: -20, duration: 0.6, ease: 'power2.in' }, outroStart + 0.10)
       .to(navEl,      { autoAlpha: 0, yPercent: -120, duration: 0.75, ease: 'power2.inOut' }, outroStart)
-      .to(scrollHint, { autoAlpha: 0, y: 20, duration: 0.6, ease: 'power2.in' }, outroStart)
-      .to(hero,       { autoAlpha: 0, duration: 0.8, ease: 'power2.in' }, outroStart);
+      .to(scrollHint, { autoAlpha: 0, y: 20, duration: 0.6, ease: 'power2.in' }, outroStart);
 
     /* Phase 4 — implemented OUTSIDE this scrub-tl as a manual
        scroll-driven rise (see the `if (nextVideoEl)` block below,
