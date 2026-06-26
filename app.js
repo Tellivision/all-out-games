@@ -1025,7 +1025,10 @@
         // without rushing. Pin 1 + Pin 2 ≈ 5.00 vh pinned inside
         // .next's 700 vh min-height; ~695 vh residual for the
         // bottom epk pill + scroll-through.
-        end: () => '+=' + Math.round(window.innerHeight * 3.20),
+        end: () => {
+          const m = window.innerWidth < 880 ? 1.4 : 3.20;
+          return '+=' + Math.round(window.innerHeight * m);
+        },
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
@@ -1037,30 +1040,11 @@
     if (worldsEl) {
       ScrollTrigger.create({
         trigger: worldsEl,
-        // PUSHED 'top 35%' → 'top top' (= 'top 0%', fires when
-        // element top reaches viewport-top). User reported Pin 2
-        // engaged "too soon" — the dwell band burned before the
-        // cards settled into their composed reading position.
-        // Mirrors the prior Pin 1 fix; both pins engage on the
-        // same semantic line. At engagement, the 3-row stack
-        // sits top-anchored at viewport 0–554 px with breathing
-        // room below — fully composed for read-pause.
-        //
-        // (intentionally NOT passing pinnedContainer here — see
-        // sibling-not-nested discussion immediately below)
-        // SIBLING, not nested. DOM check at index.html shows
-        // both .next-inner and .next-worlds are direct children
-        // of <section class="next">, so this ScrollTrigger is
-        // NOT nested inside Pin 1's pinned element. Therefore
-        // we deliberately do NOT pass pinnedContainer: innerEl
-        // (that prop is only meaningful when the trigger sits
-        // INSIDE a pinned parent). An earlier pass added it
-        // under the wrong assumption, which corrupted Pin 2's
-        // bounds — the rendered symptom was "scrolled past,
-        // no pause" because ScrollTrigger was treating .next-inner
-        // as a scroller reference for .next-worlds.
         start: 'top 20%',
-        end: () => '+=' + Math.round(window.innerHeight * 1.80),
+        end: () => {
+          const m = window.innerWidth < 880 ? 0.8 : 1.80;
+          return '+=' + Math.round(window.innerHeight * m);
+        },
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
