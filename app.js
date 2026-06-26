@@ -269,10 +269,14 @@
     let started = false;
     let lastRateWrite = 0;
     let pendingRate = 0;
-    const RATE_CAP = 3.0;
     const RATE_MIN = 0.0625;
     const PLAY_GATE_VY = 0.05;
     const RATE_THROTTLE_MS = 32; // ~30fps cap on playbackRate writes
+    // Mobile touch scrolling produces lower px/ms velocities than desktop
+    // trackpad/mouse. Boost the mapped rate so the video keeps pace.
+    const isMobile = () => window.innerWidth < 880;
+    const RATE_CAP = () => isMobile() ? 4.0 : 3.0;
+    const VY_MULT = () => isMobile() ? 2.2 : 1.0;
 
     function flushRate() {
       try { video.playbackRate = pendingRate; } catch (_) {}
@@ -306,8 +310,9 @@
         }
       }
 
-      // Forward scroll only — rate = velocity, backward freezes.
-      const rawRate = (vy > 0) ? Math.min(vy, RATE_CAP) : 0;
+      // Forward scroll only — rate = velocity × multiplier, backward freezes.
+      const boosted = vy * VY_MULT();
+      const rawRate = (boosted > 0) ? Math.min(boosted, RATE_CAP()) : 0;
       pendingRate = (rawRate > 0 && rawRate < RATE_MIN) ? 0 : rawRate;
 
       // Throttle playbackRate writes — on mobile, each write forces the
