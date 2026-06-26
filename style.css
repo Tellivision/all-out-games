@@ -1,0 +1,1424 @@
+/* ─────────────────────────────────────────────────────────────
+   All Out Games — Hero section stylesheet
+   Stack: vanilla HTML + GSAP (SplitText, ScrollTrigger). CDN.
+   Palette: deep navy void w/ electric cyan + violet bloom.
+───────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root {
+  --ink-0: #050510;          /* deepest void */
+  --ink-1: #0c0c1d;          /* near-black */ 
+  --ink-2: #16162a;          /* panel */
+  --ink-3: #232340;          /* hairline */
+
+  --hi-cyan:   #7cf6ff;      /* signature */
+  --hi-cyan-2: #50d8ff;
+  --hi-violet: #7c5bff;
+  --hi-pink:   #ff5cc0;
+  --hi-amber:  #ffb86b;
+
+  --text:        #f4f4ff;
+  --text-muted:  #9c9cbf;
+  --text-faint:  #6b6b8c;
+
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  --glass-bg:    rgba(20, 20, 36, 0.45);
+  --glass-bg-2:  rgba(12, 12, 24, 0.55);
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --max-w: 1320px;
+}
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink-0);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, video, svg { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+::selection { background: var(--hi-cyan); color: var(--ink-0); }
+
+:focus-visible {
+  outline: 2px solid var(--hi-cyan);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ─────────────────────────────────────────────  LOADING INDICATOR
+                                                ─────────── */
+.loading-indicator {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--ink-0);
+  pointer-events: none;
+}
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--ink-3);
+  border-top-color: var(--hi-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-indicator.hidden {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+
+/* ─────────────────────────────────────────────  NAV
+                                                ─────────── */
+.nav {
+  position: fixed;
+  inset: 22px 0 auto 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;       /* re-enabled on the pill after reveal */
+  padding: 0 22px;
+}
+
+.nav[data-revealed="true"] { pointer-events: auto; }
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 10px 12px 10px 18px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(124, 246, 255, 0);
+  transition: box-shadow 0.4s var(--ease), background 0.3s var(--ease);
+}
+
+.nav-pill:hover {
+  background: var(--glass-bg-2);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(124, 246, 255, 0.25);
+}
+
+/* Brand */
+.nav-brand { display: flex; align-items: center; gap: 10px; line-height: 1; }
+.nav-mark  { width: 22px; height: 22px; display: grid; place-items: center; }
+.nav-mark svg { filter: drop-shadow(0 0 6px rgba(124, 246, 255, 0.35)); }
+
+.nav-wordmark {
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.nav-wordmark .nav-sub {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* Links */
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  position: relative;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  border-radius: 999px;
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.nav-links a:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* CTA */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--hi-cyan), var(--hi-violet));
+  color: var(--ink-0);
+  box-shadow: 0 4px 14px rgba(124, 246, 255, 0.35);
+  transition: transform 0.2s var(--ease), box-shadow 0.25s var(--ease);
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(124, 246, 255, 0.5); }
+.nav-cta-dot {
+  width: 8px; height: 8px; border-radius: 999px;
+  background: var(--ink-0);
+  box-shadow: 0 0 0 4px rgba(5, 5, 16, 0.18);
+}
+
+
+/* ─────────────────────────────────────────────  HERO
+                                                ─────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--ink-0);
+  /* Z-INDEX ADDED — bug fix. Hero must paint above .next (also
+     z-auto + isolation:isolate, so per CSS spec the later-DOM
+     sibling wins the tie-break; .next was bleeding world-cards +
+     the SCROLL—REACH THE PORTAL pill onto the hero portal video
+     during any vertical scroll overlap). z=2 matches .about's
+     existing z=2 so outer sections stack consistently. Rise-band
+     side-effect: .next-video (z=1 inside .next) now paints behind
+     the pinned hero mid-rise; the rise still completes
+     mechanically once hero-pin releases. */
+  z-index: 2;
+}
+
+/* video full-bleed background */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* gentle cinematic grade to sell the portal feel */
+  /* brightness 0.95 -> 1.04 — was crushing the icy-water + astronaut
+     footage. The previous sub-1 value pushed the dark spots in the
+     portal scene into near-black; boosting above neutral keeps the
+     cinematic contrast (saturate 1.15 + contrast 1.05) without
+     dimming the bright mid-tones where the eye expects the
+     portal to pop. saturate 1.18 -> 1.15 — keeps the cyan/violet
+     halo punchy without clipping the bright icy-water highlights. */
+  filter: saturate(1.15) contrast(1.04) brightness(1.04);
+  transform: scale(1.05);
+  /* will-change REMOVED — flagging `filter` + `transform` on the
+     <video> element was promoting it to its own compositor layer on
+     every scroll-tick currentTime write, which was the source of
+     the perceived choppiness in the hero scrub-tl ("video scroll
+     play is a bit choppy and not playing totally smooth"). Modern
+     browsers handle <video> element composition natively; without
+     the hint, the filter is cached at the compositor layer so
+     per-frame video pixel updates stay on the GPU compositor path
+     without round-tripping through main-thread paint each tick.
+     The static transform: scale(1.05) (overscan) remains a
+     frozen compositor hint on its own — no per-frame work. */
+}
+
+/* Dark backdrop that is ALWAYS present so text stays legible against
+   the bright icy-water frames. Previously this only faded in AFTER
+   ignition (data-ignited=true) which left the body sub + trust row
+   sitting on near-naked bright pixels for most of the scroll. The
+   curtain (z-index 3) covers it during the cascade reveal so the
+   dramatic dark-up stays intact; here we just give the post-curtain
+   reading state a constant ink-wash backdrop. Alphas are intentionally
+   strong on the left + bottom where the column of text lives.
+
+   LIGHTENED — center vertical 0.30 -> 0.10 and bottom 0.92 -> 0.62.
+   The user reported the hero video as too dark; the previous center
+   0.30 + bottom 0.92 darkened the portal mid-tones into near-black.
+   Dropping the center to 0.10 keeps the LEFT-column dark (where the
+   headline reads) while letting the right half of the viewport see
+   the astronaut + portal glow at near-original luma. Dropping the
+   bottom 0.92 -> 0.62 keeps the scroll-hint + trust row legible
+   without smothering the lower-third portal footage. */
+.hero-grad {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    /* Horizontal sweep — strong dark on the left where the text column
+       lives, near-transparent on the right so the icy-water / portal
+       glow survives. CSS background composites via
+       `1 − (1−a)(1−b)`, NOT multiplicative, so left 0.78 + vertical
+       0.10 ≈ 0.80 effective darkness at the headline (still strong
+       ink-wash for the bright text to sit on). */
+    linear-gradient(90deg, rgba(5, 5, 16, 0.78) 0%, rgba(5, 5, 16, 0.40) 50%, rgba(5, 5, 16, 0.04) 100%),
+    /* Vertical sweep — light at top (kept airy), very light at the
+       headline band (0.10 so the astronaut + portal stay bright in
+       the viewport-center where the eye lands), mid at the bottom
+       for the scroll-hint + footer affordance. */
+    linear-gradient(180deg, rgba(5, 5, 16, 0.06) 25%, rgba(5, 5, 16, 0.10) 60%, rgba(5, 5, 16, 0.62) 100%);
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* Edge vignette pulled in around the corners (always present, subtle)
+   LIGHTENED — corner alpha 0.65 -> 0.32, pulled in tighter (100% at
+   92% of the radial). The previous full-corner 0.65 darkened all four
+   corners of the video substantially, including the lower-right
+   quadrant where the portal figurine sits. The 0.32 corner + tighter
+   pull-in keeps a hint of cinematic edge falloff without crushing
+   the portal footage at the corners. */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(130% 86% at 50% 50%, rgba(5, 5, 16, 0) 56%, rgba(5, 5, 16, 0.32) 100%);
+}
+
+/* Initial curtain — covers EVERY hero content area so only video is visible.
+   Note: NO backdrop-filter blur. The 4px blur distorted the portal video
+   into a soft, mushy look at the start of the timeline. A clean dark
+   gradient reads as "moody / unrevealed" without wrecking the footage.
+
+   LIGHTENED — top 0.80 -> 0.55, mid 0.60 -> 0.40, bottom 0.85 -> 0.65.
+   The user reported the hero video as too dark during the pre-ignite
+   scroll range (lockdown + cascade). The previous 0.80 alpha curtain
+   crushed the icy-water + astronaut portal footage into near-black,
+   making it feel like a black screen with text rather than a portal
+   video. The new 0.55/0.40/0.65 values still give the curtain enough
+   presence to read as "unrevealed" + still feel the dramatic lift at
+   IGNITION_TIME+0.06 (when autoAlpha tweens to 0), but they let the
+   portal video breathe through. The bottom band stays darkest so the
+   scroll-hint + footer affordance read legibly against bright
+   lower-third portal footage. */
+.hero-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(180deg, rgba(5, 5, 16, 0.55) 0%, rgba(5, 5, 16, 0.40) 50%, rgba(5, 5, 16, 0.65) 100%);
+}
+
+/* White camera-flash overlay for the ignition moment */
+.hero-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: radial-gradient(60% 50% at 50% 55%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Pre-intro cascade — brand words fade IN → fade OUT in place as the
+   user scrolls, telegraphing the studio identity before the ignition
+   reveal. Words are anchored left-middle of the viewport (same x-band
+   and y-band as the headline will appear) so the cascade hands off
+   visually into the headline ("Step inside / the arena.").
+   NO gradient text — solid --text fill only. */
+.hero-prenote {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  display: grid;
+  /* place-items: <align-items> <justify-items> →
+     vertically center + horizontally start (left). Same x-band
+     and y-band as .hero-content (which carries the same three-value
+     padding). Pushed closer to the viewport left edge so "ALL OUT
+     GAMES" reads as a hard-left brand statement on load.
+     ASYMMETRIC vertical padding (top > bottom) shifts the cascade
+     cell center DOWN by (top − bottom)/2 so the eyebrow chip has
+     breathing room below the nav. .hero-content carries the SAME
+     asymmetric padding so the cross-dissolve between W3 and headline
+     line 1 stays aligned (both shift down by the identical offset). */
+  place-items: center start;
+  padding:
+    clamp(60px, 8vh, 100px)
+    clamp(20px, 3vw, 40px)
+    clamp(20px, 4vh, 40px);
+}
+.prenote-word {
+  /* All 4 cascade words share the single grid cell so they cross-
+     dissolve in place at the parent's anchored position. */
+  grid-area: 1 / 1;
+  font-family: "Bebas Neue", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  /* font-size + letter-spacing deliberately MATCH .hero-headline so
+     when W3 ("STEP INSIDE") cross-dissolves into headline line 1
+     ("STEP INSIDE") at tl.time ~4.40→4.80, the letters stay the same
+     size and spacing — a true morph, not a visible text swap. */
+  font-size: clamp(56px, 9.5vw, 138px);
+  line-height: 0.95;
+  letter-spacing: 0.015em;
+  color: var(--text);
+  text-shadow: 0 8px 48px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+  will-change: transform, opacity, filter;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@media (max-width: 880px) {
+  /* Track the headline's mobile clamp so the W3 ("STEP INSIDE") → headline
+     line 1 cross-dissolve stays size-matched on tablet + phone viewports.
+     (Same clamp used by `.hero-headline` in its own @media block below.) */
+  .prenote-word {
+    font-size: clamp(48px, 12vw, 84px);
+  }
+}
+@media (max-width: 440px) {
+  /* Smallest phones (360 px iPhone SE width). Bebas Neue uppercase
+     "ALL OUT GAMES." at 48 px ≈ 343 px wide which clips a 316 px content
+     area; shrink the floor to keep it inside the viewport. The smaller
+     font is a deliberate cascade-as-brand-beat visual — the headline is
+     the primary copy and stays at its own mobile clamp even smaller. */
+  .prenote-word {
+    font-size: clamp(28px, 9vw, 56px);
+  }
+}
+
+/* Content staging (revealed by GSAP). Padded by the same three-value
+   padding as .hero-prenote (top > bottom) so the centered flex column
+   shifts DOWN by (top − bottom)/2 — gives the cyan eyebrow chip
+   breathing room below the nav. Both .hero-content AND .hero-prenote
+   carry the SAME asymmetric padding so W3 ("STEP INSIDE") remains
+   vertically aligned with headline line 1 ("STEP INSIDE") at the
+   cross-dissolve moment (each shifted down by the identical offset).
+   The .scroll-hint is positioned absolutely relative to .hero, NOT
+   .hero-content, so the bottom padding does NOT push the hint into
+   the column — it stays at `bottom: 26px` of the hero regardless. */
+.hero-content {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding:
+    clamp(60px, 8vh, 100px)
+    clamp(20px, 3vw, 40px)
+    clamp(20px, 4vh, 40px);
+  gap: 24px;
+}
+
+
+
+.hero-headline {
+  margin: 8px 0 0;
+  font-family: "Bebas Neue", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: clamp(56px, 9.5vw, 138px);
+  line-height: 0.95;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  max-width: 14ch;
+}
+.hero-headline .line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.hero-headline .accent {
+  /* Same as surrounding text — no purple, no gradient, no italic (Bebas
+     has no italic). The accent reads via the slight extra letter-spacing. */
+  color: var(--text);
+  letter-spacing: 0.06em;
+  padding-right: 0.08em;
+}
+
+.hero-sub {
+  margin: 8px 0 0;
+  max-width: 56ch;
+  font-size: clamp(17px, 1.4vw, 21px);
+  line-height: 1.5;
+  color: var(--text-muted);
+  /* Stronger ink-drop so the pale --text-muted body copy reads cleanly
+     against bright portal frames. 14px blur (not 18) keeps the shadow
+     crisp rather than halo-blurred on small body text. */
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+.hero-sub .accent {
+  color: var(--text);
+  border-bottom: 1px dashed rgba(124, 246, 255, 0.5);
+  padding-bottom: 1px;
+}
+
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  transition: transform 0.2s var(--ease), background 0.25s var(--ease), box-shadow 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.btn.primary {
+  color: var(--ink-0);
+  background: linear-gradient(135deg, var(--hi-cyan) 0%, var(--hi-violet) 100%);
+  box-shadow: 0 8px 28px rgba(124, 246, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.btn.primary .arrow {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: rgba(5, 5, 16, 0.85); color: var(--hi-cyan);
+  font-size: 12px; font-weight: 800;
+  margin-left: 4px;
+  transition: transform 0.2s var(--ease);
+}
+.btn.primary:hover { transform: translateY(-1px); box-shadow: 0 12px 36px rgba(124, 246, 255, 0.55); }
+.btn.primary:hover .arrow { transform: translateX(3px); }
+
+.btn.ghost {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-strong);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.btn.ghost:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+.btn.ghost .play-circle {
+  width: 18px; height: 18px; border-radius: 999px;
+  border: 1.5px solid var(--hi-cyan);
+  position: relative;
+}
+.btn.ghost .play-circle::after {
+  content: ""; position: absolute; inset: 0; margin: auto;
+  width: 0; height: 0;
+  border-left: 6px solid var(--hi-cyan);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin-left: 2px;
+}
+
+.hero-trust {
+  list-style: none;
+  display: flex; flex-wrap: wrap; gap: 22px;
+  margin: 22px 0 0; padding: 0;
+  /* Bumped from --text-faint (#6b6b8c) to --text-muted (#9c9cbf) so the
+     platform marks ("PlayStation", "Xbox", etc.) read legibly against
+     the portal video. */
+  color: var(--text-muted);
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+.hero-trust li { display: inline-flex; align-items: center; gap: 7px; }
+.hero-trust .logo-mark {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  /* Bumped from --text-muted (#9c9cbf) + opacity 0.7 (≈ dark-mid gray
+     on a 96%-dark backdrop) to --text (#f4f4ff) + opacity 0.85. The
+     previous combo with a dark text-shadow actually netted LESS
+     contrast (dark halo around an already-dark letter on a dark wash);
+     bright text + dark drop is the correct loud-on-quiet pairing. */
+  color: var(--text);
+  opacity: 0.85;
+  /* Subtle close drop so the bright letters stay crisp at 10px size,
+     not blurry-glowy. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+
+/* ─────────────────────────────────────────────  NEXT (2nd section: her.mp4 rises bottom→top over hero)
+                                                ─────────── */
+.next {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  /* BUMPED 380vh → 500vh → 700vh (~84% more scroll extent vs original)
+     across two rounds of user feedback "elements scrolld by to quick /
+     still way to fast". 700vh = ~5600 px scroll band on a 800-px-tall
+     viewport (= 7 viewport heights to traverse), giving each world card
+     ~10 px of scroll per 1 px of card height — deliberate pacing where
+     the user can dwell on each card without the next one already
+     being half-scrolled-into-view. Pairs with the per-element
+     transition slow-downs in this file: card clip-path 1.55 → 2.20 s,
+     headline 1.15 → 1.60 s, stats 0.65 → 1.00 s, eyebrow/sub/epk all
+     ~50% longer. Together: ~3× the dwell time per content block
+     versus the original 380vh / fast-snappy-tweens timing. Phones
+     get a proportionally smaller bump (see @media override below). */
+  min-height: 700vh;
+  padding: 0 clamp(20px, 3vw, 40px);
+  isolation: isolate;
+  background:
+    radial-gradient(60% 35% at 50% 18%, rgba(124, 91, 255, 0.10), rgba(5, 5, 16, 0) 70%),
+    var(--ink-0);
+  text-align: center;
+}
+
+/* Background video for the next section. Starts BELOW the viewport
+   (translateY 100%); a SEPARATE JS updateRise() (window.pageYOffset
+   reads) wipes it UP from the bottom of the hero section, OVER the
+   top of it, to REPLACE the hero on the user's screen.
+
+   position: fixed + inset 0 keeps the video clamped to the viewport
+   regardless of which part of the long .next section is currently
+   in view. The translateY animation is the only thing that moves
+   it visually. */
+.next-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  transform: translateY(100%);
+  will-change: transform;
+  filter: saturate(1.15) contrast(1.05) brightness(0.95);
+  /* Smooth fade-out for the .next → .about handoff. JS writes
+     opacity 0 the moment sy crosses .next's bottom edge so the
+     fixed .next-video doesn't bleed through .about's transparent
+     margins around .about-inner. Transition smooths both the
+     forward hide and the back-scroll restore, so the swap
+     happens during the about-inner's right→left wipe-in (so
+     the user's eye is on the panel, not the background bleed). */
+  transition: opacity 0.4s ease-out;
+}
+
+.next-inner {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 760px;
+  align-self: center;
+  /* BOTTOM-BUMPED clamp(60, 9vh, 100) → clamp(80, 11vh, 130) → clamp(110, 14vh, 160)
+     across two rounds. With .next min-height at 700vh and all
+     inter-element transitions ~50% slower, the bottom air between
+     the epk pill and the section's bottom edge needs proportional
+     breathing room so the user's eye settles before crossing into
+     the about section's right→left wipe. +50 px floor / +60 px
+     ceiling — meaningfully more bottom air for the new wider band. */
+  padding: clamp(100px, 13vh, 140px) clamp(20px, 3vw, 40px) clamp(110px, 14vh, 160px);
+}
+
+/* Eyebrow "Coming next" chip. */
+.next-eyebrow {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--hi-cyan);
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 2px rgba(0, 0, 0, 0.7);
+
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition: opacity 0.85s var(--ease),
+              transform 1.00s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.next-inner[data-revealed="true"] .next-eyebrow {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.35s;
+}
+
+.next-eyebrow-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--hi-cyan);
+  vertical-align: middle;
+  margin-right: 10px;
+  box-shadow: 0 0 0 3px rgba(124, 246, 255, 0.18),
+              0 0 10px rgba(124, 246, 255, 0.35);
+}
+
+/* Headline — two clipped lines that wipe IN left→right when revealed. */
+.next-headline {
+  margin: 0;
+  font-family: "Bebas Neue", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: clamp(48px, 7.5vw, 92px);
+  line-height: 1.0;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  max-width: 18ch;
+}
+/* SLOWED clip-path 0.85s → 1.15s (~35% slower headline wipe) per
+   user feedback "elements scrolld by to quick". With .next
+   min-height bumped to 500vh, the per-tween reveal needs to ramp
+   more gently over the wider scroll band — a snappier reveal would
+   compress the visual into a tighter fraction of the new section's
+   scroll distance. Pairs with the bumped line stagger delays below
+   (0.50s/0.78s → 0.55s/0.90s) — line 2 ("Fueled bold.") lands ~350
+   ms after line 1 ("Real worlds.") instead of ~280 ms. */
+.next-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  -webkit-clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.60s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.next-inner[data-revealed="true"] .next-line:nth-of-type(1) {
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  /* Bumped 0.50 → 0.55 → 0.70 across two rounds of slow-down. */
+  transition-delay: 0.70s;
+}
+.next-inner[data-revealed="true"] .next-line:nth-of-type(2) {
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  /* Bumped 0.78 → 0.90 → 1.15 — line 2 lands ~450 ms after line 1
+     (vs original ~280 ms) for a deliberate cascade read. */
+  transition-delay: 1.15s;
+}
+
+.next-sub {
+  margin: 36px auto 0;
+  max-width: 52ch;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.5;
+  color: var(--text-muted);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7);
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.85s var(--ease),
+              transform 0.85s var(--ease);
+}
+.next-inner[data-revealed="true"] .next-sub {
+  opacity: 1;
+  transform: none;
+  transition-delay: 1.35s;
+}
+
+.next-accent {
+  display: block;
+  width: clamp(60px, 8vw, 110px);
+  height: 1px;
+  margin: 32px auto 0;
+  background: linear-gradient(90deg,
+    transparent 0%, var(--hi-cyan) 50%, transparent 100%);
+  border-radius: 1px;
+
+  transform: scaleX(0);
+  opacity: 0;
+  transition: transform 1.30s cubic-bezier(0.22, 0.61, 0.36, 1) 1.90s,
+              opacity 1.00s ease 1.90s;
+}
+.next-inner[data-revealed="true"] .next-accent {
+  transform: scaleX(1);
+  opacity: 1;
+  /* BREATHE-PULSE REMOVED — previously:
+     animation: next-accent-breathe 5.6s ease-in-out 2.50s infinite alternate;
+     That perpetual 1.00 ↔ 0.55 opacity oscillation kept animating
+     long after Pin 2's dwell released the scroll, which the user
+     identified as the "animation after the pause". The accent
+     line now settles at full opacity and stays. The scaleX(1)
+     reveal itself is intact — it still wipes in left-to-right
+     during Pin 1's dwell as the initial 1.30 s transition
+     declared above. Mobile @media block that references the
+     breathe keyframes is unaffected but now also a no-op; left
+     in place in case a future accent wants to opt back in. */
+}
+@keyframes next-accent-breathe {
+  from { opacity: 1.00; }
+  to   { opacity: 0.55; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .next-inner[data-revealed="true"] .next-accent { animation: none; opacity: 0.85; }
+}
+
+/* Stats ledger */
+.next-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.4vw, 26px);
+  margin: 0 0 38px;
+  padding: 0 0 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.next-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(10px);
+  /* SLOWED opacity + transform 0.4s → 0.65s → 1.00s across two rounds of
+     "elements scrolld by to quick / still way to fast" feedback. Each
+     stat lifts over ~400 ms instead of ~150 ms so the reveal reads
+     as deliberate motion rather than a snap. Pairs with the wider
+     stagger delays below. */
+  transition: opacity 1.00s var(--ease),
+              transform 1.00s var(--ease);
+}
+.next-inner[data-revealed="true"] .next-stat {
+  opacity: 1;
+  transform: none;
+}
+.next-inner[data-revealed="true"] .next-stat:nth-of-type(1) { transition-delay: 0.00s; }
+.next-inner[data-revealed="true"] .next-stat:nth-of-type(2) { transition-delay: 0.30s; }
+.next-inner[data-revealed="true"] .next-stat:nth-of-type(3) { transition-delay: 0.60s; }
+.next-stat-num {
+  font-family: "Bebas Neue", "Inter", sans-serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+}
+.next-stat-label {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.next-stat-divider {
+  width: 1px;
+  height: clamp(20px, 3.5vh, 32px);
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(124, 246, 255, 0.40) 50%,
+    transparent 100%);
+  align-self: center;
+}
+
+/* World list */
+.next-worlds-wrap {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 760px;
+  align-self: center;
+  margin: 0;
+  padding: 0 clamp(16px, 2.5vw, 32px);
+}
+.next-worlds {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  margin: 0 0 clamp(40px, 7vh, 80px);
+  list-style: none;
+  text-align: left;
+}
+.next-world-row {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: baseline;
+  gap: 6px clamp(10px, 1.4vw, 18px);
+  padding: clamp(18px, 2.6vh, 26px) clamp(14px, 1.8vw, 22px);
+  background: rgba(8, 8, 18, 0.50);
+  border-radius: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.45s var(--ease);
+}  /* BUMPED clamp(8, 1.4vh, 14) → clamp(14, 2.4vh, 24) → clamp(20, 3.2vh, 32)
+     across two rounds of slow-down feedback — modal breathing room
+     between world cards. The original 8-14 px gap merged the bottom
+     border of row N with the top border of row N+1 making the cards
+     read as one continuous band; the new 20-32 px gap means each card
+     sits as a discrete unit. Pairs with the .next min-height 700vh
+     bump above — the wider scroll band + per-card 2.2 s wipe + wider
+     inter-card gap means each card now has its own dwell moment. */
+.next-world-row + .next-world-row {
+  margin-top: clamp(20px, 3.2vh, 32px);
+}
+.next-world-row:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.next-world-status {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  color: var(--hi-cyan);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.next-world-name {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: "Bebas Neue", "Inter", sans-serif;
+  font-size: clamp(20px, 2.4vw, 32px);
+  letter-spacing: 0.04em;
+  color: var(--text);
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+.next-world-ship {
+  grid-column: 3;
+  grid-row: 1;
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: right;
+}
+.next-world-blurb {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 6px 0 0;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  color: var(--text-muted);
+  line-height: 1.55;
+  max-width: 62ch;
+  text-transform: none;
+}
+
+/* EPK micro-link */
+.next-epk {
+  position: relative;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(8px, 1vw, 12px);
+  margin: clamp(24px, 3vh, 36px) auto 0;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(8, 8, 18, 0.55);
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* POST-PIN DEAD-ANIM REMOVED — previously: opacity: 0 → 1 +
+     translateY(12px) → translateY(0) over 1.40 s on
+     [data-deep-revealed="true"]. That rise fired the moment
+     the user scrolled past Pin 2's dwell handover into the
+     next-epk region ("some animation after the pause, needs
+     to be removed"). EPK pill now renders in its settled
+     state from the start — no opacity ramp, no Y-lift, no
+     reveal. data-next-reveal-deep has also been removed from
+     the <a> in index.html so the IntersectionObserver no
+     longer wastes cycles observing it. Hover-state
+     transitions (background / border-color / color) below
+     are still on — those are interaction states, not reveal. */
+  transition: background 0.25s var(--ease),
+              border-color 0.25s var(--ease),
+              color 0.25s var(--ease);
+}
+.next-epk:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.next-epk-label { color: var(--text); }
+.next-epk-arrow {
+  display: inline-block;
+  color: var(--hi-cyan);
+  transition: transform 0.25s var(--ease);
+}
+.next-epk:hover .next-epk-arrow { transform: translateX(4px); }
+.next-epk-addr {
+  color: var(--hi-cyan);
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+
+
+/* ─────────────────────────────────────────────  ABOUT (3rd section: wipes right→left over .next)
+                                                ─────────── */
+.about {
+  position: relative;
+  min-height: 200vh;
+  padding: 0;
+  isolation: isolate;
+  background: transparent;
+  z-index: 2;
+}
+
+/* Full-bleed background video. Animates in from right via
+   translateX driven by updateAboutRise() in app.js. position:fixed
+   so it pins to the viewport during the about section scroll. */
+.about-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+  will-change: transform;
+}
+
+/* Stage container — copy panel that rises up from below as the
+   user scrolls into the about section. Semi-transparent dark
+   background keeps copy readable over the background video. */
+.about-inner {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  width: min(1320px, 92vw);
+  max-width: none;
+  margin: 0 auto;
+  height: 100vh;
+  padding: clamp(36px, 5vh, 72px) clamp(24px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(80% 50% at 50% 50%, rgba(124, 91, 255, 0.08), rgba(5, 5, 16, 0) 70%),
+    rgba(5, 5, 16, 0.82);
+  will-change: transform;
+}
+
+.about-eyebrow {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--hi-cyan);
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.about-eyebrow-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--hi-cyan);
+  vertical-align: middle;
+  margin-right: 10px;
+  box-shadow: 0 0 0 3px rgba(124, 246, 255, 0.18),
+              0 0 10px rgba(124, 246, 255, 0.35);
+}
+
+.about-headline {
+  margin: 0;
+  font-family: "Bebas Neue", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: clamp(24px, 3.6vw, 56px);
+  line-height: 1.04;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  max-width: none;
+}
+.about-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.about-sub {
+  margin: clamp(30px, 3vh, 42px) 0 0;
+  font-size: clamp(17px, 1.2vw, 20px);
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.about-meta {
+  list-style: none;
+  margin: clamp(36px, 3.6vh, 52px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.about-meta li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.about-meta-label {
+  color: var(--text-faint);
+  font-weight: 700;
+  letter-spacing: 0.20em;
+}
+.about-meta-value {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.20em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-inner { transform: none !important; opacity: 1 !important; }
+  .about-bg-video { position: fixed; transform: none !important; }
+  .last-bg { position: fixed; transform: none !important; opacity: 1 !important; }
+  .last-inner { transform: none !important; opacity: 1 !important; transition: none !important; }
+}
+
+
+/* ─────────────────────────────────────────────  LAST (4th section: fades in over .about, pinned)
+                                                ─────────── */
+.last {
+  position: relative;
+  min-height: 100vh;
+  padding: 0;
+  isolation: isolate;
+  background: #050510;
+  z-index: 2;
+}
+
+/* Full-bleed background video — fixed to viewport, visible when
+   section scrolls into view. Same pattern as .about-bg-video. */
+.last-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+
+/* When section is in viewport, fade in the video */
+.last[data-visible="true"] .last-bg {
+  opacity: 1;
+}
+
+/* Copy panel — right-center aligned to avoid the HUD element
+   on the left side of the video. Semi-transparent dark overlay
+   keeps text readable over the busy background. */
+.last-inner {
+  position: relative;
+  z-index: 5;
+  width: min(680px, 88vw);
+  margin-left: auto;
+  margin-right: clamp(24px, 6vw, 120px);
+  min-height: 100vh;
+  padding: clamp(36px, 5vh, 72px) clamp(24px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(80% 50% at 50% 50%, rgba(0, 180, 255, 0.06), rgba(5, 5, 16, 0) 70%),
+    rgba(5, 5, 16, 0.82);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out 0.15s, transform 0.8s ease-out 0.15s;
+}
+
+.last[data-visible="true"] .last-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.last-eyebrow {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--hi-cyan);
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.last-eyebrow-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--hi-cyan);
+  vertical-align: middle;
+  margin-right: 10px;
+  box-shadow: 0 0 0 3px rgba(124, 246, 255, 0.18),
+              0 0 10px rgba(124, 246, 255, 0.35);
+}
+
+.last-headline {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 64px);
+  line-height: 1.04;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  max-width: none;
+}
+
+.last-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.last-sub {
+  margin: clamp(24px, 3vh, 36px) 0 0;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.last-sig {
+  margin-top: clamp(40px, 5vh, 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.last-sig-name {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.last-sig-year {
+  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+
+/* ─────────────────────────────────────────────  RESPONSIVE
+                                                ─────────── */
+
+/* Hamburger toggle (hidden on desktop, visible on mobile) */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.nav-toggle:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--border-strong); }
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--hi-cyan);
+  outline-offset: 3px;
+}
+.nav-toggle .bar {
+  position: absolute;
+  left: 9px; right: 9px;
+  height: 1.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.3s var(--ease), opacity 0.2s var(--ease), top 0.3s var(--ease);
+}
+.nav-toggle .bar:nth-child(1) { top: 12px; }
+.nav-toggle .bar:nth-child(2) { top: 17px; }
+.nav-toggle .bar:nth-child(3) { top: 22px; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) { top: 17px; transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) { top: 17px; transform: rotate(-45deg); }
+
+/* Mobile drawer — hangs off the bottom of the nav pill when opened */
+.nav-drawer {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 4px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  transform-origin: top center;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s linear 0.3s;
+}
+.nav-drawer.is-open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s linear 0s;
+}
+.nav-drawer a {
+  display: block;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  border-radius: 12px;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.nav-drawer a:hover,
+.nav-drawer a:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+@media (max-width: 880px) {
+  /* Phones (≤880 px) want tighter scroll than desktop 700vh/section
+     — keeps total page height sane on a 640 px-tall viewport. The
+     mobile override bumps the original 380vh up to 500vh so phones
+     still feel the slowness lift, just not as severe as desktop.
+     See the .next + .about min-height: 700vh comments above for the
+     full desktop slow-down rationale. */
+  .about, .next { min-height: 500vh; }
+
+  .nav-pill {
+    gap: 14px;
+    padding: 8px 10px 8px 14px;
+  }
+  .nav-links { display: none; }      /* desktop-style link row → replaced by drawer */
+  .nav-toggle { display: inline-flex; }
+  .nav-wordmark .nav-sub { display: none; }
+  /* Mobile pill is the positioning anchor for the absolute drawer child */
+  .nav-pill { position: relative; }
+  /* Hero content stays vertically centered (flex justify-content:center
+     on .hero-content handles it) — compress the horizontal padding and
+     tighten the asymmetric vertical padding (smaller breath below the
+     nav on tablet/phone). The TOP & BOTTOM paddings on .hero-prenote
+     are MIRRORED from .hero-content so the cascade-into-headline
+     cross-dissolve stays vertically aligned on mobile. */
+  .hero-content {
+    padding-top: clamp(40px, 7vh, 70px);
+    padding-bottom: clamp(16px, 3vh, 30px);
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 20px;
+  }
+  .hero-prenote {
+    padding-top: clamp(40px, 7vh, 70px);
+    padding-bottom: clamp(16px, 3vh, 30px);
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .hero-headline { font-size: clamp(48px, 12vw, 84px); }
+  .hero-ctas .btn { padding: 12px 18px; font-size: 13px; }
+  .hero-trust { gap: 14px; font-size: 11px; }
+}
+
+@media (min-width: 881px) {
+  /* Drawer only used on mobile; keep it hidden even if the toggle were pressed */
+  .nav-drawer { display: none; }
+  .nav-toggle { display: none; }
+}
+
+@media (max-width: 480px) {
+  .nav { inset: 14px 0 auto 0; padding: 0 14px; }
+  .nav-cta span:not(.nav-cta-dot) { display: none; }
+  .nav-cta { padding: 10px 12px; }
+  /* drawer narrower on small screens */
+  .nav-drawer { left: 14px; right: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero[data-ignited="true"] .hero-flash { display: none; }
+  .hero-prenote { display: none; }   /* prefere no transient UI movement */
+  .hero-prenote .prenote-arrow { animation: none; }
+}

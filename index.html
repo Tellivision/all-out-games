@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>All Out Games — Step inside.</title>
+    <meta name="description" content="All Out Games crafts worlds you can't put down. Step through the portal." />
+    <meta name="theme-color" content="#050510" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />    <link rel="preload"
+      href="public/portal.mp4"
+      type="video/mp4"
+    />
+
+    <!-- Disable the browser's auto-restored scroll on load so the hero
+         auto-ignite below is the only thing that determines the very first
+         scroll position. Must run synchronously in <head>, BEFORE the
+         deferred GSAP scripts, otherwise the browser may restore the
+         previous scrollY before we can correct it. -->
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
+  </head>
+
+  <body>
+    <!-- Loading indicator (removed after GSAP initializes) -->
+    <div class="loading-indicator" data-loading aria-hidden="true">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- ────────────  NAV  (revealed after video ignition)  ──────────── -->
+    <header class="nav" data-nav aria-label="Primary navigation">
+      <div class="nav-pill" data-nav-pill>
+        <a class="nav-brand" href="#" aria-label="All Out Games — home">
+          <span class="nav-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <defs>
+                <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%"  stop-color="#7cf6ff" />
+                  <stop offset="100%" stop-color="#7c5bff" />
+                </linearGradient>
+              </defs>
+              <path d="M16 2 L30 26 H2 Z" fill="url(#brandGrad)" />
+              <path d="M16 11 L23 26 H9 Z" fill="#050510" />
+            </svg>
+          </span>
+          <span class="nav-wordmark"><span>ALL&nbsp;OUT</span><span class="nav-sub">GAMES</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Sections">
+          <a href="#games">Games</a>
+          <a href="#studio">Studio</a>
+          <a href="#news">News</a>
+          <a href="#community">Community</a>
+        </nav>
+
+        <a class="nav-cta" href="#play">
+          <span>Play&nbsp;Now</span>
+          <span class="nav-cta-dot" aria-hidden="true"></span>
+        </a>
+
+        <!-- Mobile-only hamburger (CSS hides it on desktop) -->
+        <button
+          class="nav-toggle"
+          data-nav-toggle
+          type="button"
+          aria-label="Open menu"
+          aria-controls="primary-nav-links"
+          aria-expanded="false"
+        >
+          <span class="bar" aria-hidden="true"></span>
+          <span class="bar" aria-hidden="true"></span>
+          <span class="bar" aria-hidden="true"></span>
+        </button>
+
+        <!-- Mobile drawer (anchored inside .nav-pill so position:absolute resolves correctly) -->
+        <nav
+          class="nav-drawer"
+          id="primary-nav-links"
+          data-nav-drawer
+          aria-label="Sections (mobile)"
+        >
+          <a href="#games">Games</a>
+          <a href="#studio">Studio</a>
+          <a href="#news">News</a>
+          <a href="#community">Community</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ────────────  HERO  ──────────── -->
+    <section class="hero" data-hero aria-label="Portal — All Out Games">
+      <!-- Video (autoplays muted, scroll-scrubs its own currentTime) -->
+      <div class="hero-video-wrap" aria-hidden="true">
+        <video
+          class="hero-video"
+          data-hero-video
+          src="public/portal.mp4"
+          muted
+          playsinline
+          preload="auto"
+        ></video>
+        <!-- Bottom gradient that emerges once the video lights up — keeps text legible against the bright portal -->
+        <div class="hero-grad"></div>
+      </div>
+
+      <!-- Intro reveal ingredients (all start hidden) -->
+      <div class="hero-curtain" data-curtain aria-hidden="true"></div>
+      <div class="hero-flash" data-flash aria-hidden="true"></div>
+      <div class="hero-vignette" data-vignette aria-hidden="true"></div>
+
+      <!-- Pre-intro cascade: each brand word fades IN then fades OUT as you scroll,
+           giving the upper scroll range a rhythmic "story" before the ignition
+           reveal (nav + headline + sub + CTAs + trust). All words are
+           positioned at the same center position so they cross-fade in place. -->
+      <div class="hero-prenote" data-prenote aria-hidden="true">
+        <span class="prenote-word" data-prenote-word="all-out">All&nbsp;out&nbsp;games</span>
+        <span class="prenote-word" data-prenote-word="worlds">Worlds</span>
+        <span class="prenote-word" data-prenote-word="step">Step&nbsp;inside</span>
+      </div>
+
+      <!-- Hero content (revealed by GSAP after the video ignition) -->
+      <div class="hero-content" data-hero-content>
+        <h1 class="hero-headline" data-headline>
+          <span class="line" data-hero-line>Step inside</span>
+          <span class="line" data-hero-line>the <span class="accent italic">arena.</span></span>
+        </h1>
+
+        <p class="hero-sub" data-reveal-sub>
+          We build worlds you can't put down. Worlds where every loadout matters,
+          every match teaches something, and every weekend disappears. <span class="accent">Open the portal.</span>
+        </p>
+
+        <div class="hero-ctas" data-reveal-ctas>
+          <a class="btn primary" href="#play">
+            <span>Step inside</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn ghost" href="#trailer">
+            <span class="play-circle" aria-hidden="true"></span>
+            Watch the trailer
+          </a>
+        </div>
+
+        <ul class="hero-trust" data-reveal-trust aria-label="Trusted by">
+          <li><span class="logo-mark">PS</span>PlayStation</li>
+          <li><span class="logo-mark">XB</span>Xbox</li>
+          <li><span class="logo-mark">PC</span>Steam</li>
+          <li><span class="logo-mark">NX</span>Nintendo</li>
+        </ul>
+      </div>
+
+      <!-- Subtle "scroll to scrub" affordance -->
+      <div class="scroll-hint" data-reveal-scroll aria-hidden="true">
+        <span>scroll — scrub the portal</span>
+        <svg viewBox="0 0 16 24" width="10" height="16" aria-hidden="true">
+          <path d="M8 1 V22 M2 16 L8 22 L14 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- ────────────  SPACER  (gives scroll-scrub its room: 2nd section)  ──────────── -->
+    <section class="next" data-next aria-label="More from All Out Games — coming soon">
+      <!-- Background video for the next section. Starts hidden below
+           the viewport (translateY 100%); on scroll, a separate
+           scrub-tl wipes it up over the hero to REPLACE the hero.
+           Plays once at native rate (NOT scroll-scrubbed); no loop.
+           Muted so muted-autoplay is allowed by all browsers. -->
+      <video class="next-video" data-next-video src="public/her.mp4" muted playsinline preload="none" aria-hidden="true"></video>
+
+      <div class="next-inner" data-next-inner>
+        <!-- Stats ledger — first copy the reader sees at rise-completion.
+             Three monospace counts in display face, tiny mono labels.
+             Animates in alongside the existing eyebrow/headline/sub so the
+             entrance "delivers" the throughput story before any new reads. -->
+        <div class="next-stats" aria-label="Production at a glance">
+          <div class="next-stat next-stat-item">
+            <span class="next-stat-num">06</span>
+            <span class="next-stat-label">In production</span>
+          </div>
+          <span class="next-stat-divider" aria-hidden="true"></span>
+          <div class="next-stat next-stat-item">
+            <span class="next-stat-num">03</span>
+            <span class="next-stat-label">Shipping winter &rsquo;25</span>
+          </div>
+          <span class="next-stat-divider" aria-hidden="true"></span>
+          <div class="next-stat next-stat-item">
+            <span class="next-stat-num">01</span>
+            <span class="next-stat-label">World-first drop</span>
+          </div>
+        </div>
+
+        <span class="next-eyebrow" data-next-reveal="eyebrow">
+          <span class="next-eyebrow-dot" aria-hidden="true"></span>
+          Coming next
+        </span>
+        <h2 class="next-headline">
+          <span class="next-line" data-next-reveal="line">Real worlds.</span>
+          <span class="next-line" data-next-reveal="line">Fueled bold.</span>
+        </h2>
+        <p class="next-sub" data-next-reveal="sub">Six games in active production. Three shipping this winter. The best thing we've ever made drops first.</p>
+        <span class="next-accent" data-next-reveal="accent" aria-hidden="true"></span>
+      </div>
+
+      <!-- Deeper layers — elements positioned absolutely inside .next so
+           the user scrolls them into view AFTER the sticky .next-inner
+           has already settled. Each one fires its own IntersectionObserver
+           (see app.js) so they appear sequenced as the user continues
+           reading the page. -->
+
+      <!-- World list — three "shipping this winter" game rows. Status
+           bracket prefix + display name + blurb + ship window. Rows wipe
+           in left→right (clipPath) staggered. Reads like a terminal
+           output — matches the dusty mono voice the rest of the site
+           uses on system-status pills. -->
+      <div class="next-worlds-wrap">
+      <ul class="next-worlds" aria-label="Worlds shipping this winter">
+        <li class="next-world-row">
+          <span class="next-world-status">[ IN PRODUCTION ]</span>
+          <span class="next-world-name">Relic Run</span>
+          <span class="next-world-ship">Q4 · 2025</span>
+          <p class="next-world-blurb">Co-op dungeon crawler. Procedural floors, persistent characters, run-by-run depth that keeps you up past 3 a.m.</p>
+        </li>
+        <li class="next-world-row">
+          <span class="next-world-status">[ BETA Q1 &rsquo;26 ]</span>
+          <span class="next-world-name">Stellar Drift</span>
+          <span class="next-world-ship">Q1 · 2026</span>
+          <p class="next-world-blurb">6v6 zero-G arena shooter. Mod-friendly loadouts, weekly seasons, an esports path that pays the rent.</p>
+        </li>
+        <li class="next-world-row">
+          <span class="next-world-status">[ WORLD-FIRST ]</span>
+          <span class="next-world-name">Constellation</span>
+          <span class="next-world-ship">TBA</span>
+          <p class="next-world-blurb">A persistent solar-system MMO. Years of roadmap, not months. The thing we've always wanted to build, finally funded.</p>
+        </li>
+      </ul>
+
+      <a class="next-epk" href="#press">
+        <span class="next-epk-label">Press kit</span>
+        <span class="next-epk-arrow" aria-hidden="true">→</span>
+        <span class="next-epk-addr">alloutgames.studio / press</span>
+      </a>
+      </div>
+    </section>
+
+    <!-- ────────────  ABOUT  (3rd section: wipes in right→left OVER .next as user scrolls past it)  ──────────── -->
+    <section class="about" data-about aria-label="About All Out Games">
+      <!-- Full-bleed background video — plays behind the copy panel.
+           Fades out when the about wipe crosses into the .about section
+           (handled by updateAboutRise() bleed suppression). -->
+      <video class="about-bg-video" data-about-video src="public/woman.mp4" muted loop playsinline preload="auto" aria-hidden="true"></video>
+
+      <!-- Stage container — wipes right→left over .next (same mechanic
+           as before). Now carries only copy, no video tile. -->
+      <div class="about-inner" data-about-inner>
+        <span class="about-eyebrow">
+          <span class="about-eyebrow-dot" aria-hidden="true"></span>
+          About the studio
+        </span>
+
+        <h2 class="about-headline">
+          <span class="about-line">We build the games</span>
+          <span class="about-line">we wished existed.</span>
+        </h2>
+
+        <p class="about-sub">
+          All Out Games is an independent studio crafting worlds you can't put down —
+          small team, big ambitions, shipping the kinds of games nobody else dares.
+        </p>
+
+        <p class="about-sub">
+          Founded by vets of competitive shooters and persistent-world RPGs, we're
+          building the games we wish existed when we were kids — ones with teeth, ones
+          that teach you something each session, ones worth getting back to.
+        </p>
+
+        <ul class="about-meta" aria-label="At a glance">
+          <li><span class="about-meta-label">Founded</span><span class="about-meta-value">2023</span></li>
+          <li><span class="about-meta-label">Based</span><span class="about-meta-value">Lisbon · Remote</span></li>
+          <li><span class="about-meta-label">Team</span><span class="about-meta-value">14 humans</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ────────────  LAST  (4th section: fades in over .about, pinned)  ──────────── -->
+    <section class="last" data-last aria-label="What's Next">
+      <video class="last-bg" data-last-video src="public/last_section.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+
+      <div class="last-inner" data-last-inner>
+        <span class="last-eyebrow">
+          <span class="last-eyebrow-dot" aria-hidden="true"></span>
+          What's next
+        </span>
+
+        <h2 class="last-headline">
+          <span class="last-line">The future is loud</span>
+          <span class="last-line">and we're building it.</span>
+        </h2>
+
+        <p class="last-sub">
+          We don't follow trends — we break them. Every world we build
+          demands your attention and refuses to let go.
+        </p>
+
+        <p class="last-sub">
+          No safe bets. No quiet launches. Just games that hit hard,
+          stick with you, and remind you why you started playing in the first place.
+        </p>
+
+        <div class="last-sig">
+          <span class="last-sig-name">All Out Games</span>
+          <span class="last-sig-year">Est. 2023</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────  SCRIPTS  (CDN order matters: gsap → plugins → app)  ───── -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/SplitText.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>
