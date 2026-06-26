@@ -1366,7 +1366,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 @media (max-width: 880px) {
   /* ── Section scroll distances ── */
-  .about, .next { min-height: 500vh; }
+  .next { min-height: 500vh; }
+  .about { min-height: 150vh; }
 
   /* ── Nav ── */
   .nav-pill {
