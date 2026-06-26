@@ -628,6 +628,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   inset: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   object-fit: cover;
   z-index: 1;
   transform: translateY(100%);
@@ -1021,6 +1022,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   left: 0;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   object-fit: cover;
   display: block;
   z-index: 1;
@@ -1038,6 +1040,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-width: none;
   margin: 0 auto;
   height: 100vh;
+  height: 100dvh;
   padding: clamp(36px, 5vh, 72px) clamp(24px, 4vw, 56px);
   display: flex;
   flex-direction: column;
@@ -1182,6 +1185,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   margin-left: auto;
   margin-right: clamp(24px, 6vw, 120px);
   height: 100vh;
+  height: 100dvh;
   padding: clamp(36px, 5vh, 72px) clamp(24px, 4vw, 56px);
   display: flex;
   flex-direction: column;
@@ -1361,45 +1365,96 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 @media (max-width: 880px) {
-  /* Phones (≤880 px) want tighter scroll than desktop 700vh/section
-     — keeps total page height sane on a 640 px-tall viewport. The
-     mobile override bumps the original 380vh up to 500vh so phones
-     still feel the slowness lift, just not as severe as desktop.
-     See the .next + .about min-height: 700vh comments above for the
-     full desktop slow-down rationale. */
+  /* ── Section scroll distances ── */
   .about, .next { min-height: 500vh; }
 
+  /* ── Nav ── */
   .nav-pill {
     gap: 14px;
     padding: 8px 10px 8px 14px;
+    position: relative;
   }
-  .nav-links { display: none; }      /* desktop-style link row → replaced by drawer */
+  .nav-links { display: none; }
   .nav-toggle { display: inline-flex; }
   .nav-wordmark .nav-sub { display: none; }
-  /* Mobile pill is the positioning anchor for the absolute drawer child */
-  .nav-pill { position: relative; }
-  /* Hero content stays vertically centered (flex justify-content:center
-     on .hero-content handles it) — compress the horizontal padding and
-     tighten the asymmetric vertical padding (smaller breath below the
-     nav on tablet/phone). The TOP & BOTTOM paddings on .hero-prenote
-     are MIRRORED from .hero-content so the cascade-into-headline
-     cross-dissolve stays vertically aligned on mobile. */
+
+  /* ── Hero ── */
   .hero-content {
     padding-top: clamp(40px, 7vh, 70px);
     padding-bottom: clamp(16px, 3vh, 30px);
-    padding-left: 12px;
-    padding-right: 12px;
-    gap: 20px;
+    padding-left: 14px;
+    padding-right: 14px;
+    gap: 18px;
   }
   .hero-prenote {
     padding-top: clamp(40px, 7vh, 70px);
     padding-bottom: clamp(16px, 3vh, 30px);
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
-  .hero-headline { font-size: clamp(48px, 12vw, 84px); }
+  .hero-headline { font-size: clamp(44px, 11vw, 80px); }
+  .hero-sub { font-size: clamp(14px, 1.3vw, 17px); }
   .hero-ctas .btn { padding: 12px 18px; font-size: 13px; }
-  .hero-trust { gap: 14px; font-size: 11px; }
+  .hero-trust { gap: 12px; font-size: 10px; }
+  .hero-trust .logo-mark { width: 20px; height: 20px; font-size: 8px; }
+  .scroll-hint { bottom: 18px; }
+
+  /* ── Next section ── */
+  .next-inner {
+    padding: clamp(60px, 8vh, 90px) clamp(14px, 2.5vw, 28px) clamp(60px, 8vh, 90px);
+  }
+  .next-stats {
+    gap: clamp(8px, 1.8vw, 16px);
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+  }
+  .next-stat-num { font-size: clamp(22px, 3vw, 36px); }
+  .next-stat-label { font-size: 8px; letter-spacing: 0.16em; }
+  .next-sub { font-size: clamp(13px, 1.2vw, 16px); }
+  .next-worlds-wrap { padding: 0 clamp(12px, 2vw, 24px); }
+  .next-world-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: clamp(14px, 2vh, 20px) clamp(12px, 2vw, 18px);
+  }
+  .next-world-status { font-size: 8px; }
+  .next-world-name { font-size: clamp(18px, 2.2vw, 28px); }
+  .next-world-ship {
+    position: absolute;
+    top: clamp(14px, 2vh, 20px);
+    right: clamp(12px, 2vw, 18px);
+    font-size: 9px;
+  }
+  .next-world-row { position: relative; }
+  .next-world-blurb { font-size: 12px; max-width: none; }
+  .next-epk {
+    margin-top: clamp(16px, 2.5vh, 28px);
+    padding: 8px 14px;
+    font-size: 9px;
+  }
+  .next-epk-addr { display: none; }
+
+  /* ── About ── */
+  .about-inner {
+    padding: clamp(28px, 4vh, 52px) clamp(16px, 3vw, 36px);
+    width: min(1320px, 94vw);
+  }
+  .about-headline { font-size: clamp(22px, 3.2vw, 44px); }
+  .about-sub { font-size: clamp(14px, 1.2vw, 17px); }
+  .about-meta { gap: 10px; font-size: 11px; }
+  .about-meta li { gap: 10px; padding-bottom: 10px; }
+
+  /* ── Last ── */
+  .last-inner {
+    width: min(680px, 92vw);
+    margin-left: clamp(16px, 4vw, 48px);
+    margin-right: clamp(16px, 4vw, 48px);
+    padding: clamp(28px, 4vh, 52px) clamp(16px, 3vw, 36px);
+  }
+  .last-headline { font-size: clamp(24px, 3.5vw, 48px); }
+  .last-sub { font-size: clamp(14px, 1.2vw, 17px); }
+  .last-sig { margin-top: clamp(28px, 3vh, 40px); }
 }
 
 @media (min-width: 881px) {
@@ -1409,11 +1464,63 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 @media (max-width: 480px) {
-  .nav { inset: 14px 0 auto 0; padding: 0 14px; }
+  .nav { inset: 12px 0 auto 0; padding: 0 12px; }
   .nav-cta span:not(.nav-cta-dot) { display: none; }
   .nav-cta { padding: 10px 12px; }
-  /* drawer narrower on small screens */
-  .nav-drawer { left: 14px; right: 14px; }
+  .nav-drawer { left: 12px; right: 12px; }
+
+  /* Hero: tighter spacing, smaller headline */
+  .hero-content {
+    padding-top: clamp(36px, 6vh, 56px);
+    padding-bottom: clamp(12px, 2vh, 20px);
+    gap: 14px;
+  }
+  .hero-prenote {
+    padding-top: clamp(36px, 6vh, 56px);
+    padding-bottom: clamp(12px, 2vh, 20px);
+  }
+  .hero-headline { font-size: clamp(36px, 10vw, 64px); }
+  .hero-sub { font-size: 14px; max-width: none; }
+  .hero-ctas { flex-direction: column; gap: 8px; }
+  .hero-ctas .btn { width: 100%; justify-content: center; }
+  .hero-trust { gap: 8px; font-size: 9px; flex-wrap: wrap; }
+  .scroll-hint { bottom: 12px; font-size: 9px; }
+
+  /* Next: further compress */
+  .next-inner {
+    padding: clamp(48px, 6vh, 72px) 14px clamp(48px, 6vh, 72px);
+  }
+  .next-stats { flex-wrap: wrap; gap: 10px; }
+  .next-stat-divider { display: none; }
+  .next-world-row { padding: 14px 12px; }
+
+  /* About */
+  .about-inner { padding: clamp(24px, 3vh, 40px) 16px; }
+  .about-headline { font-size: clamp(20px, 5.5vw, 36px); }
+  .about-sub { font-size: 14px; }
+  .about-meta { font-size: 10px; }
+
+  /* Last */
+  .last-inner {
+    margin-left: 14px;
+    margin-right: 14px;
+    padding: clamp(24px, 3vh, 40px) 16px;
+  }
+  .last-headline { font-size: clamp(22px, 6vw, 40px); }
+  .last-sub { font-size: 14px; }
+}
+
+@media (max-width: 360px) {
+  .hero-headline { font-size: clamp(30px, 9vw, 52px); }
+  .next-headline { font-size: clamp(32px, 8vw, 56px); }
+  .about-headline { font-size: clamp(18px, 5vw, 30px); }
+  .last-headline { font-size: clamp(20px, 5.5vw, 34px); }
+  .next-stats { gap: 8px; }
+  .next-stat-num { font-size: 20px; }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .scroll-hint { bottom: calc(26px + env(safe-area-inset-bottom)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
