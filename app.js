@@ -214,7 +214,12 @@
   // RISE_BAND_PX stays 1.30 vh so the rise is still the last ~14% of
   // the pin range). On a 800 px tall viewport: heroPinRange ≈ 7600 px
   // (was 6000 px).
-  const heroPinRange = () => Math.max(3500, Math.round(window.innerHeight * 9.5));
+  const heroPinRange = () => {
+    const mobile = window.innerWidth < 880;
+    const mult = mobile ? 5.0 : 9.5;
+    const floor = mobile ? 2000 : 3500;
+    return Math.max(floor, Math.round(window.innerHeight * mult));
+  };
 
   /* ─────────────────────────────────────────────────────────────
      4a. RATE-SCALED HERO PLAYBACK (replaces the old `currentTime`
