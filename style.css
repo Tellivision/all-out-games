@@ -1416,7 +1416,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .next-stat-num { font-size: clamp(22px, 3vw, 36px); }
   .next-stat-label { font-size: 8px; letter-spacing: 0.16em; }
   .next-sub { font-size: clamp(13px, 1.2vw, 16px); }
-  .next-worlds-wrap { padding: 0 clamp(12px, 2vw, 24px); }
+  .next-worlds-wrap {
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 clamp(12px, 2vw, 24px);
+  }
   .next-worlds { text-align: center; }
   .next-world-row {
     display: flex;
@@ -1425,35 +1431,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
     text-align: center;
     gap: 4px;
     padding: clamp(14px, 2vh, 20px) clamp(12px, 2vw, 18px);
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
     position: relative;
   }
-  .next-world-status {
-    font-size: 8px;
-    grid-column: auto;
-    grid-row: auto;
-  }
-  .next-world-name {
-    font-size: clamp(18px, 2.2vw, 28px);
-    grid-column: auto;
-    grid-row: auto;
-  }
+  .next-world-status { font-size: 8px; }
+  .next-world-name { font-size: clamp(18px, 2.2vw, 28px); }
   .next-world-ship {
     position: absolute;
     top: clamp(14px, 2vh, 20px);
     right: clamp(12px, 2vw, 18px);
     font-size: 9px;
-    grid-column: auto;
-    grid-row: auto;
   }
-  .next-world-blurb {
-    font-size: 12px;
-    max-width: none;
-    grid-column: auto;
-    grid-row: auto;
-  }
+  .next-world-blurb { font-size: 12px; max-width: none; }
   .next-epk {
     margin-top: clamp(16px, 2.5vh, 28px);
     padding: 8px 14px;

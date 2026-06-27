@@ -1037,14 +1037,14 @@
     }
 
     const worldsEl = document.querySelector('.next-worlds-wrap');
-    if (worldsEl) {
+    // Pin 2 disabled on mobile — GSAP's pin injects inline position:left
+    // that breaks the CSS centering chain. Without the pin, cards scroll
+    // naturally and the flex + margin:auto centering works correctly.
+    if (worldsEl && window.innerWidth >= 880) {
       ScrollTrigger.create({
         trigger: worldsEl,
         start: 'top 20%',
-        end: () => {
-          const m = window.innerWidth < 880 ? 0.8 : 1.80;
-          return '+=' + Math.round(window.innerHeight * m);
-        },
+        end: () => '+=' + Math.round(window.innerHeight * 1.80),
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
