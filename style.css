@@ -1428,17 +1428,32 @@ button { font: inherit; color: inherit; cursor: pointer; }
     max-width: 480px;
     margin-left: auto;
     margin-right: auto;
+    position: relative;
   }
-  .next-world-status { font-size: 8px; }
-  .next-world-name { font-size: clamp(18px, 2.2vw, 28px); }
+  .next-world-status {
+    font-size: 8px;
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .next-world-name {
+    font-size: clamp(18px, 2.2vw, 28px);
+    grid-column: auto;
+    grid-row: auto;
+  }
   .next-world-ship {
     position: absolute;
     top: clamp(14px, 2vh, 20px);
     right: clamp(12px, 2vw, 18px);
     font-size: 9px;
+    grid-column: auto;
+    grid-row: auto;
   }
-  .next-world-row { position: relative; }
-  .next-world-blurb { font-size: 12px; max-width: none; }
+  .next-world-blurb {
+    font-size: 12px;
+    max-width: none;
+    grid-column: auto;
+    grid-row: auto;
+  }
   .next-epk {
     margin-top: clamp(16px, 2.5vh, 28px);
     padding: 8px 14px;

@@ -1089,15 +1089,26 @@
      8.  Mobile nav drawer toggle
      ────────────────────────────────────────────────────────── */
   const navToggle  = document.querySelector('[data-nav-toggle]');
-  const navDrawer  = document.querySelector('[data-nav-drawer]');    if (navToggle && navDrawer) {
+  const navDrawer  = document.querySelector('[data-nav-drawer]');
+  let menuResumeTimer = null;
+    if (navToggle && navDrawer) {
       const setOpen = (open) => {
         navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         navToggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
         navDrawer.classList.toggle('is-open', open);
-        // Pause hero video while menu is open so the scrub doesn't
-        // fight with the user reading nav links.
+        // Pause hero video while menu is open and for a short beat
+        // after closing so the scrub doesn't jump back in immediately.
         if (video) {
-          try { open ? video.pause() : video.play().catch(() => {}); } catch (_) {}
+          try {
+            if (open) {
+              clearTimeout(menuResumeTimer);
+              video.pause();
+            } else {
+              menuResumeTimer = setTimeout(() => {
+                try { video.play().catch(() => {}); } catch (_) {}
+              }, 800);
+            }
+          } catch (_) {}
         }
       };
       navToggle.addEventListener('click', () => {
