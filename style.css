@@ -1422,8 +1422,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: 4px;
     padding: clamp(14px, 2vh, 20px) clamp(12px, 2vw, 18px);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .next-world-status { font-size: 8px; }
   .next-world-name { font-size: clamp(18px, 2.2vw, 28px); }

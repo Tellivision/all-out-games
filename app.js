@@ -1094,6 +1094,11 @@
         navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         navToggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
         navDrawer.classList.toggle('is-open', open);
+        // Pause hero video while menu is open so the scrub doesn't
+        // fight with the user reading nav links.
+        if (video) {
+          try { open ? video.pause() : video.play().catch(() => {}); } catch (_) {}
+        }
       };
       navToggle.addEventListener('click', () => {
         setOpen(navToggle.getAttribute('aria-expanded') !== 'true');
