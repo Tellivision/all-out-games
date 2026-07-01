@@ -357,7 +357,7 @@
         pin: hero,
         pinSpacing: true,
         anticipatePin: 1,
-        scrub: 0.5,
+        scrub: window.innerWidth < 880 ? 0.9 : 0.5,
         invalidateOnRefresh: true
       }
     });
@@ -907,7 +907,7 @@
         trigger: hero,
         start: 'top top',
         end: () => `+=${heroPinRange()}`,
-        pin: hero, pinSpacing: true, scrub: 0.5, invalidateOnRefresh: true
+        pin: hero, pinSpacing: true, scrub: window.innerWidth < 880 ? 0.9 : 0.5, invalidateOnRefresh: true
       }
     });
     tl.time(0);
