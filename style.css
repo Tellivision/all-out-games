@@ -870,7 +870,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   margin: 0 0 clamp(40px, 7vh, 80px);
   padding: 0;
   list-style: none;
-  text-align: left;
+  /* CENTERED — was text-align: left. The desktop card uses a 3-column
+     grid that visually centers the title (col 1 = status badge left,
+     col 2 = title 1fr, col 3 = ship date right) but the .next-world-blurb
+     (grid-column 1 / -1, row 2) was inheriting left and feeling
+     hard-pinned to the card's left edge — visual asymmetry against the
+     centered title above. Switching the parent UL to text-align: center
+     centers the blurb (main fix) and centers the status/title inline
+     content within their grid cells, while the ship date keeps its
+     own text-align: right override to preserve the staggered
+     "tracking bracket" visual. */
+  text-align: center;
 }
 .next-world-row {
   display: grid;
