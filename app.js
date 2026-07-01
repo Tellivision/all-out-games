@@ -280,8 +280,8 @@
     // Mobile touch scrolling produces lower px/ms velocities than desktop
     // trackpad/mouse. Boost the mapped rate so the video keeps pace.
     const isMobile = () => window.innerWidth < 880;
-    const RATE_CAP = () => isMobile() ? 4.0 : 3.0;
-    const VY_MULT = () => isMobile() ? 2.2 : 1.0;
+    const RATE_CAP = () => isMobile() ? 5.0 : 3.0;
+    const VY_MULT = () => isMobile() ? 3.0 : 1.0;
 
     function flushRate() {
       try { video.playbackRate = pendingRate; } catch (_) {}
