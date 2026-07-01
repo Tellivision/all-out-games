@@ -216,7 +216,7 @@
   // (was 6000 px).
   const heroPinRange = () => {
     const mobile = window.innerWidth < 880;
-    const mult = mobile ? 5.0 : 9.5;
+    const mult = mobile ? 6.5 : 9.5;
     const floor = mobile ? 2000 : 3500;
     return Math.max(floor, Math.round(window.innerHeight * mult));
   };
@@ -280,8 +280,8 @@
     // Mobile touch scrolling produces lower px/ms velocities than desktop
     // trackpad/mouse. Boost the mapped rate so the video keeps pace.
     const isMobile = () => window.innerWidth < 880;
-    const RATE_CAP = () => isMobile() ? 5.0 : 3.0;
-    const VY_MULT = () => isMobile() ? 3.0 : 1.0;
+    const RATE_CAP = () => isMobile() ? 4.5 : 3.0;
+    const VY_MULT = () => isMobile() ? 2.5 : 1.0;
 
     function flushRate() {
       try { video.playbackRate = pendingRate; } catch (_) {}
