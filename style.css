@@ -660,20 +660,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: clamp(100px, 13vh, 140px) clamp(20px, 3vw, 40px) clamp(110px, 14vh, 160px);
 }
 
-/* Eyebrow "Coming next" chip. */
-.next-eyebrow {
-  font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--hi-cyan);
-  display: inline-block;
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  margin-bottom: 32px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 2px rgba(0, 0, 0, 0.7);
+/* Eyebrow "Coming next" chip. */  .next-eyebrow {
+    font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--hi-cyan);
+    display: inline-block;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 32px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 2px rgba(0, 0, 0, 0.7);
 
   opacity: 0;
   transform: translateY(14px) scale(0.96);
@@ -1050,17 +1049,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
     radial-gradient(80% 50% at 50% 50%, rgba(124, 91, 255, 0.08), rgba(5, 5, 16, 0) 70%),
     rgba(5, 5, 16, 0.82);
   will-change: transform;
-}
-
-.about-eyebrow {
+}  .about-eyebrow {
   font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--hi-cyan);
   display: inline-block;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
   margin-bottom: 32px;
@@ -1202,17 +1199,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .last[data-visible="true"] .last-inner {
   opacity: 1;
   transform: translateY(0);
-}
-
-.last-eyebrow {
+}  .last-eyebrow {
   font-family: "Space Mono", "JetBrains Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--hi-cyan);
   display: inline-block;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
   margin-bottom: 32px;
@@ -1388,6 +1383,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding-right: 14px;
     gap: 18px;
   }
+  .hero-trust .logo-mark { font-size: 10px; }
   .hero-prenote {
     padding-top: clamp(40px, 7vh, 70px);
     padding-bottom: clamp(16px, 3vh, 30px);
@@ -1395,11 +1391,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding-right: 14px;
   }
   .hero-headline { font-size: clamp(44px, 11vw, 80px); }
-  .hero-sub { font-size: clamp(14px, 1.3vw, 17px); }
-  .hero-ctas .btn { padding: 12px 18px; font-size: 13px; }
-  .hero-trust { gap: 12px; font-size: 10px; }
+  .hero-sub { font-size: clamp(16px, 1.5vw, 19px); }
+  .hero-ctas .btn { padding: 12px 18px; font-size: 14px; }
+  .hero-trust { gap: 14px; font-size: 11px; }
   .hero-trust .logo-mark { width: 20px; height: 20px; font-size: 8px; }
-  .scroll-hint { bottom: 18px; }
+  .scroll-hint { bottom: 18px; font-size: 11px; }
 
   /* Remove video filter on mobile — forces software compositing which
      compounds playbackRate-change stutter. */
@@ -1415,8 +1411,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding-bottom: 16px;
   }
   .next-stat-num { font-size: clamp(22px, 3vw, 36px); }
-  .next-stat-label { font-size: 8px; letter-spacing: 0.16em; }
-  .next-sub { font-size: clamp(13px, 1.2vw, 16px); }
+  .next-stat-label { font-size: 10px; letter-spacing: 0.14em; }
+  .next-sub { font-size: clamp(17px, 2.4vw, 20px); line-height: 1.55; }
   .next-worlds-wrap {
     width: 100%;
     max-width: 520px;
@@ -1434,19 +1430,21 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding: clamp(14px, 2vh, 20px) clamp(12px, 2vw, 18px);
     position: relative;
   }
-  .next-world-status { font-size: 8px; }
-  .next-world-name { font-size: clamp(18px, 2.2vw, 28px); }
+  .next-world-status { font-size: 10px; letter-spacing: 0.16em; }
+  .next-world-name { font-size: clamp(24px, 5vw, 34px); }
   .next-world-ship {
     position: absolute;
     top: clamp(14px, 2vh, 20px);
     right: clamp(12px, 2vw, 18px);
-    font-size: 9px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
   }
-  .next-world-blurb { font-size: 12px; max-width: none; }
+  .next-world-blurb { font-size: clamp(15px, 2.8vw, 17px); line-height: 1.6; max-width: none; }
   .next-epk {
-    margin-top: clamp(16px, 2.5vh, 28px);
-    padding: 8px 14px;
-    font-size: 9px;
+    margin-top: clamp(20px, 3vh, 36px);
+    padding: 10px 18px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
   }
   .next-epk-addr { display: none; }
 
@@ -1456,8 +1454,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     width: min(1320px, 94vw);
   }
   .about-headline { font-size: clamp(22px, 3.2vw, 44px); }
-  .about-sub { font-size: clamp(14px, 1.2vw, 17px); }
-  .about-meta { gap: 10px; font-size: 11px; }
+  .about-sub { font-size: clamp(17px, 2.4vw, 20px); line-height: 1.65; }
+  .about-meta { gap: 12px; font-size: 12px; }
   .about-meta li { gap: 10px; padding-bottom: 10px; }
 
   /* ── Last ── */
@@ -1468,7 +1466,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding: clamp(28px, 4vh, 52px) clamp(16px, 3vw, 36px);
   }
   .last-headline { font-size: clamp(24px, 3.5vw, 48px); }
-  .last-sub { font-size: clamp(14px, 1.2vw, 17px); }
+  .last-sub { font-size: clamp(17px, 2.4vw, 20px); line-height: 1.65; }
   .last-sig { margin-top: clamp(28px, 3vh, 40px); }
 }
 
@@ -1495,10 +1493,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding-bottom: clamp(12px, 2vh, 20px);
   }
   .hero-headline { font-size: clamp(36px, 10vw, 64px); }
-  .hero-sub { font-size: 14px; max-width: none; }
+  .hero-sub { font-size: 16px; max-width: none; line-height: 1.55; }
+  .next-sub { font-size: 16px; }
   .hero-ctas { flex-direction: column; gap: 8px; }
   .hero-ctas .btn { width: 100%; justify-content: center; }
-  .hero-trust { gap: 8px; font-size: 9px; flex-wrap: wrap; }
+  .hero-trust { gap: 10px; font-size: 10px; flex-wrap: wrap; }
   .scroll-hint { bottom: 12px; font-size: 9px; }
 
   /* Next: further compress */
@@ -1512,8 +1511,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   /* About */
   .about-inner { padding: clamp(24px, 3vh, 40px) 16px; }
   .about-headline { font-size: clamp(20px, 5.5vw, 36px); }
-  .about-sub { font-size: 14px; }
-  .about-meta { font-size: 10px; }
+  .about-sub { font-size: 16px; line-height: 1.65; }
+  .about-meta { font-size: 12px; }
 
   /* Last */
   .last-inner {
@@ -1522,7 +1521,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     padding: clamp(24px, 3vh, 40px) 16px;
   }
   .last-headline { font-size: clamp(22px, 6vw, 40px); }
-  .last-sub { font-size: 14px; }
+  .last-sub { font-size: 16px; line-height: 1.65; }
 }
 
 @media (max-width: 360px) {
